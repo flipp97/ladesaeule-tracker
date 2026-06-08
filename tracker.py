@@ -3,23 +3,32 @@ import csv
 import os
 from datetime import datetime
 
-URL = https://enbw-emp.azure-api.net/emobility-public-api/api/v1/chargestations/2064581
+URL = "DEINE_ENBW_API_URL"
 
-data = requests.get(URL).json()
+# GitHub Secret wird als Environment Variable übergeben
+API_KEY = os.getenv("ENBW_API_KEY")
+
+headers = {
+    "Ocp-Apim-Subscription-Key": API_KEY
+}
+
+response = requests.get(URL, headers=headers)
+
+# falls API fehlschlägt → klarer Fehler
+response.raise_for_status()
+
+data = response.json()
 
 total = data["numberOfChargePoints"]
-free = data["availableChargePoints"]
-
-# alternativ noch genauer:
-free_check = sum(
+free = sum(
     1 for cp in data["chargePoints"]
     if cp["status"] == "AVAILABLE"
 )
 
-datei = "daten.csv"
-exists = os.path.exists(datei)
+file = "daten.csv"
+exists = os.path.exists(file)
 
-with open(datei, "a", newline="") as f:
+with open(file, "a", newline="") as f:
     writer = csv.writer(f)
 
     if not exists:
@@ -27,8 +36,8 @@ with open(datei, "a", newline="") as f:
 
     writer.writerow([
         datetime.now().isoformat(),
-        free_check,
+        free,
         total
     ])
 
-print(f"{free_check}/{total}")
+print(f"{free}/{total}")
