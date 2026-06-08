@@ -3,7 +3,9 @@ import csv
 import os
 from datetime import datetime
 
-URL = "DEINE_ENBW_API_URL"
+URL = https://enbw-emp.azure-api.net/emobility-public-api/api/v1/chargestations/2064581
+
+
 
 # GitHub Secret wird als Environment Variable übergeben
 API_KEY = os.getenv("ENBW_API_KEY")
