@@ -3,7 +3,7 @@ import csv
 import os
 from datetime import datetime
 
-URL = https://enbw-emp.azure-api.net/emobility-public-api/api/v1/chargestations/2064581
+URL = "https://enbw-emp.azure-api.net/emobility-public-api/api/v1/chargestations/2064581"
 
 
 
