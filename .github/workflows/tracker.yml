@@ -2,8 +2,7 @@ name: Ladepunkt Tracker
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
-
+    - cron: '*/15 * * * *'   # alle 15 Minuten
   workflow_dispatch:
 
 jobs:
@@ -14,23 +13,28 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - run: python tracker.py
+      - name: Run tracker script
+        run: python tracker.py
 
-     - name: Commit data
-  run: |
-    git config user.name "github-actions"
-    git config user.email "actions@github.com"
+      - name: Commit and push data (safe version)
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
 
-    git add daten.csv
+          git add daten.csv
 
-    git commit -m "Update Daten" || exit 0
+          git commit -m "Update Daten" || exit 0
 
-    git pull --rebase origin main || true
+          git pull --rebase origin main || true
 
-    git push origin main
+          git push origin main
