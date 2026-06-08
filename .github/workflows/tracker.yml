@@ -23,6 +23,10 @@ jobs:
         with:
           python-version: '3.11'
 
+      # 🔥 NEU: Dependencies installieren
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Run tracker script
         env:
           ENBW_API_KEY: ${{ secrets.ENBW_API_KEY }}
