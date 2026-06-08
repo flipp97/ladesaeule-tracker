@@ -1,0 +1,34 @@
+name: Ladepunkt Tracker
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: python tracker.py
+
+      - name: Commit data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+          git add daten.csv
+
+          git commit -m "Update Daten" || exit 0
+
+          git push
